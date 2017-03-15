@@ -1,7 +1,7 @@
 # fis3-lint-noob-eslint
 
 noob lab（菜鸟实验室）出品，基于fis3的eslint自动检测插件
-
+![](https://img.shields.io/npm/v/fis3.svg) ![](https://img.shields.io/npm/dm/fis3.svg)
 ## 安装
 
 ```nodejs

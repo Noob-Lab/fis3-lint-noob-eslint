@@ -5,6 +5,10 @@
   "main": "index.js",
   "author": "mewtwo",
   "license": "ISC",
+  "repository":{
+    "type": "git",
+    "url": "https://github.com/Noob-Lab/fis3-lint-noob-eslint"
+  },
   "dependencies": {
     "cheerio": "^0.22.0",
     "eslint": "^3.17.1",
