@@ -1,6 +1,6 @@
 # fis3-lint-noob-eslint
 
-noob lab（菜鸟实验室）出品，基于fis3的eslint自动检测插件
+[noob lab](https://github.com/Noob-Lab)（菜鸟实验室）出品，基于fis3的eslint自动检测插件
 
 ## 安装
 
