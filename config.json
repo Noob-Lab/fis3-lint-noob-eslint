@@ -1,0 +1,13 @@
+{
+  "ignoreFiles":["fis-config.js"],
+  "useEslintrc": false,
+  "envs": ["es6", "browser", "node", "commonjs", "amd"],
+  "globals": [
+    "__inline",
+    "__uri",
+    "__RESOURCE_MAP__",
+    "fis"
+  ],
+  "rules": {},
+  "plugins": []
+}
