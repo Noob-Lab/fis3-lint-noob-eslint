@@ -22,6 +22,7 @@ module.exports = function (content, file, conf) {
             return _.uniq(objValue.concat(srcValue))
 
         }
+        
     })
 
     // 调用eslint node api
@@ -39,7 +40,7 @@ module.exports = function (content, file, conf) {
         var output = formatter(report.results)
 
         // 读取belss字符
-        fs.readFile(__dirname+'/bless.txt', {flag: 'r+', encoding: 'utf8'}, function (err, bless) {
+        fs.readFile(__dirname+'/bless.txt', {flag: 'r', encoding: 'utf8'}, function (err, bless) {
 
             if(err) {
 

@@ -1,6 +1,6 @@
 {
   "name": "fis3-lint-noob-eslint",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "基于fis3的eslint检测插件",
   "main": "index.js",
   "author": "mewtwo",
