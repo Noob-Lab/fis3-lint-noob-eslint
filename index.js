@@ -8,6 +8,29 @@ var config = require('./config.json')
 var cheerio = require('cheerio')
 var fs = require('fs')
 
+
+/**
+ * @description html实体转换为javascript字符串
+ * @param {string} str 需要格式化的html字符串
+ */
+function html2js(str) {
+    var htmlArr = str.replace(/\\/g, "\\\\").replace(/\\/g, "\\/").replace(/\'/g, "\\\'").replace(/\"/g, "\\\"").split('\n')
+    var len = htmlArr.length
+    var outArr = []
+    //
+    _.forEach(htmlArr, function (value,index) {
+        if (value !== "") {
+            if (index === len - 1) {
+                outArr.push("\"" + value + "\"")
+            } else {
+                outArr.push("\"" + value + "\\n"+"\"+\n")
+            }
+        }
+    })
+
+    return outArr.join("")
+}
+
 module.exports = function (content, file, conf) {
 
     // 合并standard的rules和plugins
@@ -15,15 +38,7 @@ module.exports = function (content, file, conf) {
     _.merge(config.rules, standard.rules)
 
     // 合并传入参数
-    _.mergeWith(config, conf, function (objValue, srcValue) {
-
-        if (_.isArray(objValue)) { // 对数组单独处理，合并到数组后面
-
-            return _.uniq(objValue.concat(srcValue))
-
-        }
-        
-    })
+    _.merge(config,conf)
 
     // 调用eslint node api
     var CLIEngine = require("eslint").CLIEngine
@@ -40,26 +55,15 @@ module.exports = function (content, file, conf) {
         var output = formatter(report.results)
 
         // 读取belss字符
-        fs.readFile(__dirname+'/bless.txt', {flag: 'r', encoding: 'utf8'}, function (err, bless) {
 
-            if(err) {
+            fs.readFile(__dirname+'/bless.txt', {flag: 'r'}, function (err,bless) {
+                var jsStr = 'console.error('+ html2js(output) +');\n'
+                var idStr = 'console.error("-------------------- '+ file.id +' --------------------");\n'
+                var htmlStr = 'var errorDom=document.getElementById("errorDom");if(errorDom){errorDom.innerHTML='+bless+'}else{document.write("<div id=errorDom style=\'background: rgba(0,0,0,0.8);display: flex;position:absolute;top:0;width:100%;height:100%;color:red;font-size: .2rem;justify-content:center;align-items:Center;\'>\"+'+bless+'+\"</div>")};'
+                var outStr = htmlStr+idStr+jsStr
+                fs.unlink(fis.project.getTempRoot() + '/www/debug-lint.js', function () {
 
-                console.error(err)
-                return;
-
-            }else{
-                 // 读取 fis 服务器缓存目录下的index.html
-                fs.readFile(fis.project.getTempRoot() + '/www/index.html', {encoding: 'utf8'},function(err,dataHtml){
-
-                    // 把读取到的index.html内容传给cheerio
-                    var $ = cheerio.load(dataHtml)
-                    // 设置body宽度为100%，防止响应式修改宽度
-                    $('body').css({'width':'100%'})
-                    // 在dom中输出提示
-                    $('body').prepend('<pre id="blessError" style="background-color: #000;color:#FFFF66;margin: 0 auto;width: 7.5rem;overflow: hidden">'+bless+'</pre>')
-
-                    // 将拼接好的html重新写入index.html
-                    fs.writeFile(fis.project.getTempRoot() + '/www/index.html', $.html(), {flag: 'w'}, function (err) {
+                    fs.writeFile(fis.project.getTempRoot() + '/www/debug-lint.js', outStr, {flag: 'a'}, function (err) {
 
                         if(err) {
 
@@ -68,48 +72,36 @@ module.exports = function (content, file, conf) {
                         } else {
 
                         }
+
                     })
 
                 })
 
-            }
-
-        })
+            })
 
         // 在控制台展示错误信息
         fis.log.info("----------------------------------------     "+file.id+"     ----------------------------------------\n\n\n"+output)
 
-        return
+        // return
 
     // 判断没有错误
     }else{
 
-        // 读取 fis 服务器缓存目录下的index.html
-        fs.readFile(fis.project.getTempRoot() + '/www/index.html', {encoding: 'utf8'},function(err,dataHtml){
+        // 删除html中的错误提示
+        var htmlStr = 'var errorDom=document.getElementById("errorDom");if(errorDom){document.getElementsByTagName("body")[0].removeChild(errorDom)};'
+        fs.unlink(fis.project.getTempRoot() + '/www/debug-lint.js', function () {
 
-            // 把读取到的index.html内容传给cheerio
-            var $ = cheerio.load(dataHtml)
+            fs.writeFile(fis.project.getTempRoot() + '/www/debug-lint.js', htmlStr, {flag: 'a'}, function (err) {
 
-            // 判断页面中是否有id为blessError的元素
-            if($('#blessError').length > 0){
+                if(err) {
 
-                // 删除在错误的时候添加的样式
-                $('body').removeAttr('style')
-                // 删除在错误的时候添加的dom
-                $('#blessError').remove()
+                    console.error(err)
 
-                // 将拼接好的html重新写入index.html
-                fs.writeFile(fis.project.getTempRoot() + '/www/index.html', $.html(), {flag: 'w'}, function (err) {
+                } else {
 
-                    if(err) {
-                        console.error(err)
-                    } else {
+                }
 
-                    }
-
-                })
-
-            }
+            })
 
         })
 

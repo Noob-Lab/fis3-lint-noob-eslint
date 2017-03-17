@@ -1,6 +1,6 @@
 {
   "name": "fis3-lint-noob-eslint",
-  "version": "1.0.6",
+  "version": "2.0.1",
   "description": "基于fis3的eslint检测插件",
   "main": "index.js",
   "author": "mewtwo",
@@ -26,7 +26,6 @@
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
     "fs": "0.0.1-security",
-    "lodash": "^4.17.4",
-    "path": "^0.12.7"
+    "lodash": "^4.17.4"
   }
 }

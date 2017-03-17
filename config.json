@@ -6,7 +6,20 @@
     "__inline",
     "__uri",
     "__RESOURCE_MAP__",
-    "fis"
+    "fis",
+    "Vue",
+    "$",
+    "session_storage",
+    "m9futil",
+    "alert",
+    "Navigation",
+    "navigator",
+    "TDAPP",
+    "jiuFuWallet",
+    "Swiper",
+    "Context",
+    "Tool",
+    "TouchSlide"
   ],
   "rules": {},
   "plugins": []

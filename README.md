@@ -12,24 +12,17 @@ npm install fis3-lint-noob-eslint -g
 在fis-config.js中配置如下：
 ```
 var config = {
-    "ignoreFiles":["fis-config.js"],
-    envs: ['es6'],
-    globals: ['fis'],
+    ignoreFiles:[],
+    envs: [],
+    globals: [],
     rules: {
-       "accessor-pairs": "error",
-       "arrow-spacing": ["error", { "before": true, "after": true }],
-       "block-spacing": ["error", "always"],
-       "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
-       "camelcase": ["error", { "properties": "never" }],
-       "comma-dangle": ["error", {
-       "arrays": "never",
-       "objects": "never",
-       "imports": "never",
-       "exports": "never",
-       "functions": "never"
-       }]
+        // 不必要非得用骆驼拼接法
+      "camelcase": 0,
+        // 设置为0，代表 == 也可以不必要非得 ===
+      "eqeqeq": 0
     }
 }
+
 
 fis.match('*.js', {
     lint: fis.plugin('noob-eslint', config)
@@ -59,10 +52,23 @@ fis.match('*.js', {
     "__inline",
     "__uri",
     "__RESOURCE_MAP__",
-    "fis"
+    "fis",
+    "Vue",
+    "$",
+    "session_storage",
+    "m9futil",
+    "alert",
+    "Navigation",
+    "navigator",
+    "TDAPP",
+    "jiuFuWallet",
+    "Swiper",
+    "Context",
+    "Tool",
+    "TouchSlide"
   ],
-  "rules": {}, // 遵循standard标准，已默认配置
-  "plugins": [] // 遵循standard标准，已默认配置
+  "rules": {},
+  "plugins": []
 }
 ```
 
